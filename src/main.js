@@ -3,8 +3,10 @@ let phaserCfg = {
     width: 1920,
     height: 1080,
     scene: [
-        BlackScene,
-        SplashScene
+        // BlackScene,
+        // SplashScene,
+        // TitleScene,
+        GameScene
     ]
 }
 
