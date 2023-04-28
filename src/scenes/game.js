@@ -12,6 +12,7 @@ class GameScene extends Phaser.Scene {
         this.load.image("middlemountain", "middle mountain.png")
 
         this.load.audio("celeste", "celeste bside chapter complete.wav")
+        this.load.audio("fireaway", "fire again bass boosted.mp3")
     }
 
     create() {
@@ -20,6 +21,9 @@ class GameScene extends Phaser.Scene {
 
         let celeste = this.sound.add("celeste")
         celeste.setVolume(0.5)
+
+        let fireaway = this.sound.add("fireaway")
+        fireaway.setVolume(0.3)
 
         // this.add.image(phaserCfg.width / 2, phaserCfg.height / 2, "allhuds")
         this.add.sprite(phaserCfg.width / 4, phaserCfg.height / 2, "leftmountain")
@@ -46,6 +50,7 @@ class GameScene extends Phaser.Scene {
         theend.setOrigin(0.5, 0.5)
         theend.setAlpha(0)
 
+        fireaway.play()
 
         // Effects that require timing
         this.tweens.add({
@@ -59,6 +64,7 @@ class GameScene extends Phaser.Scene {
             alpha: 1,
             duration: 500,
             delay: delay += 2000,
+            onStart: () => fireaway.stop(),
             onComplete: () => {celeste.play()}
         })
     }
