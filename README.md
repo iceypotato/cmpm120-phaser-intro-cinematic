@@ -1,6 +1,8 @@
 # cmpm120-phaser-project
 Phaser project for school
 
+You can click on Play, when the text appears
+
 ## Credits
 
 ### Images
