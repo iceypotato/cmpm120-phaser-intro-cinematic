@@ -70,7 +70,7 @@ class TitleScene extends Phaser.Scene {
         menuMusic.play()
         this.add.tween({
             targets: halobg,
-            x: phaserCfg.width / 2,
+            x: phaserCfg.width / 4 * 3,
             duration: 3000,
         })
         this.add.tween({
