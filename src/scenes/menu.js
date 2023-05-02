@@ -14,6 +14,7 @@ class TitleScene extends Phaser.Scene {
     }
 
     create() {
+        window.currentscene = this
         let fullscreenKey = this.input.keyboard.addKey("F")
         fullscreenKey.on("down", function() {
             if (this.scale.isFullscreen) {
@@ -58,16 +59,8 @@ class TitleScene extends Phaser.Scene {
         })
         play.on(Phaser.Input.Events.POINTER_DOWN, () => {
             menuMusic.stop()
-            this.loopTheSong = false
             this.scene.start("game")
         })
-
-        this.input.on(Phaser.Input.Events.POINTER_DOWN, () => {
-            menuMusic.stop()
-            this.loopTheSong = false
-            this.scene.restart()
-        })
-        // console.log("bruh 1 " + this.loopTheSong)
 
         let credits = this.add.text(942, phaserCfg.height + 200, "Credits")
         credits.setFontFamily("Impact")
@@ -81,7 +74,6 @@ class TitleScene extends Phaser.Scene {
         quit.setFontSize(100)
         quit.setOrigin(0.5,0.5)
 
-        // let soundManager = new Phaser.Sound.BaseSoundManager
         menuMusic.addMarker({
             name: "intro skip",
             start: 3.5,
@@ -95,129 +87,100 @@ class TitleScene extends Phaser.Scene {
                 loop: true,
             })
         })
-        let tweenManager = new Phaser.Tweens.TweenManager(this)
-        tweenManager.add({
-            targets: halobg,
-            x: phaserCfg.width / 4 * 3,
-            duration: 3000,
+        let buttons = this.tweens.chain({
+            paused: true,
+            tweens: [
+                {
+                    targets: play,
+                    duration: 500,
+                    delay: 500,
+                    y: 545
+                },
+                {
+                    targets: credits,
+                    duration: 500,
+                    y: 545 + 100
+                },
+                {
+                    targets: quit,
+                    duration: 500,
+                    y: 545 + 200
+                }
+            ]
         })
-        tweenManager.add({
-            targets: halobg,
-            x: phaserCfg.width / 2,
-            y: phaserCfg.height / 2,
-            scale: 2.742,
-            duration: 100,
-            // delay: delay += 3400
+        let tc4 = this.tweens.add({
+                paused: true,
+                targets: mc,
+                duration: 500,
+                y: 1080
+            })
+        let tc3 = this.tweens.chain({
+            paused: true,
+            tweens: [
+                {
+                    targets: ellipse1,
+                    alpha: 1,
+                    duration: 0
+                },
+                {
+                    targets: ellipse1,
+                    duration: 400,
+                    repeat: -1,
+                    angle: 360,
+                }
+            ]
         })
-        tweenManager.add({
-            targets: title,
-            duration: 400,
-            y: 200,
-            // delay: delay
+        let tc2 = this.tweens.chain({
+            paused: true,
+            tweens: [
+                {
+                    targets: triagnal1,
+                    alpha: 1,
+                    duration: 0
+                },
+                {
+                    targets: triagnal1,
+                    duration: 1000,
+                    repeat: -1,
+                    angle: 360,
+                },
+            ],
         })
-        tweenManager.add({
-            targets: title,
-            duration: 400,
-            // delay: delay,
-            repeat: -1,
-            scale: 1.2,
-            yoyo: true,
+        let tc1 = this.tweens.chain({
+            tweens: [
+                {
+                    targets: halobg,
+                    x: phaserCfg.width / 4 * 3,
+                    duration: 3000,
+                },
+                {
+                    targets: halobg,
+                    x: phaserCfg.width / 2,
+                    y: phaserCfg.height / 2,
+                    scale: 2.742,
+                    duration: 100,
+                    delay: 400
+                },
+                {
+                    targets: title,
+                    duration: 400,
+                    y: 200,
+                    onComplete: () => {
+                        tc2.resume()
+                        tc3.resume()
+                        tc4.resume()
+                        buttons.resume()
+                    }
+                },
+                {
+                    targets: title,
+                    duration: 400,
+                    repeat: -1,
+                    scale: 1.2,
+                    yoyo: true,
+                },
+            ],
         })
-        tweenManager.add({
-            targets: triagnal1,
-            alpha: 1,
-            duration: 0
-        })
-        tweenManager.add({
-            targets: ellipse1,
-            alpha: 1,
-            duration: 0
-        })
-        tweenManager.add({
-            targets: mc,
-            delay: 3700,
-            duration: 500,
-            y: 1080
-        })
-        tweenManager.add({
-            
-        })
-        tweenManager.add({
-            
-        })
-
-
-        this.add.tween({
-            targets: halobg,
-            x: phaserCfg.width / 4 * 3,
-            duration: 3000,
-        }) 
-        
-        this.add.tween({
-            targets: halobg,
-            x: phaserCfg.width / 2,
-            y: phaserCfg.height / 2,
-            scale: 2.742,
-            duration: 100,
-            delay: delay += 3400
-        })
-        this.add.tween({
-            targets: title,
-            duration: 400,
-            y: 200,
-            delay: delay
-        })
-        this.add.tween({
-            targets: title,
-            duration: 400,
-            delay: delay,
-            repeat: -1,
-            scale: 1.2,
-            yoyo: true,
-        })
-        this.time.delayedCall(delay += 200, () => {
-            triagnal1.setAlpha(1)
-        })
-        this.time.delayedCall(delay, () => {
-            ellipse1.setAlpha(1)
-        })
-        this.add.tween({
-            targets: triagnal1,
-            duration: 1000,
-            repeat: -1,
-            angle: 360,
-        })
-        this.add.tween({
-            targets: ellipse1,
-            duration: 400,
-            repeat: -1,
-            angle: 360,
-        })
-        this.add.tween({
-            targets: mc,
-            delay: 3700,
-            duration: 500,
-            y: 1080
-        })
-        this.add.tween({
-            targets: [play],
-            delay: delay += 1500,
-            duration: 500,
-            y: 545
-        })
-        this.add.tween({
-            targets: [credits],
-            delay: delay += 500,
-            duration: 500,
-            y: 545 + 100
-        })
-        this.add.tween({
-            targets: [quit],
-            delay: delay += 500,
-            duration: 500,
-            y: 545 + 200
-        })
-
     }
 
     update() {

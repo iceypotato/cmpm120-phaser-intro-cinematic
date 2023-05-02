@@ -6,7 +6,7 @@ let phaserCfg = {
         BlackScene,
         SplashScene,
         TitleScene,
-        GameScene
+        GameScene,
     ]
 }
 
