@@ -10,11 +10,19 @@ class TitleScene extends Phaser.Scene {
         this.load.image("title", "title.png")
         this.load.image("mc", "master_chief_halo_infinite scuffed.png")
         
-        this.load.audio("xenogenesis", "TheFatRat - Xenogenesis cut.wav")
+        this.load.audio("xenogenesis", "TheFatRat - Xenogenesis cut.wav", {instances: 2})
     }
 
     create() {
-        
+        let fullscreenKey = this.input.keyboard.addKey("F")
+        fullscreenKey.on("down", function() {
+            if (this.scale.isFullscreen) {
+                this.scale.stopFullscreen();
+            }
+            else {
+                this.scale.startFullscreen();
+            }
+        }, this)
         let delay = 0
         this.cameras.main.fadeIn(1500)
         let halobg = this.add.sprite(300, phaserCfg.height / 2 - 400, "halo")
@@ -23,7 +31,7 @@ class TitleScene extends Phaser.Scene {
         halobg.scaleX = 5
         halobg.scaleY = 5
 
-        let title = this.add.sprite(phaserCfg.width / 2, -100, "title")
+        let title = this.add.sprite(phaserCfg.width / 2, -110, "title")
 
         let mc = this.add.sprite(phaserCfg.width / 2, phaserCfg.height + 300, "mc")
         mc.scaleX = 2
@@ -50,8 +58,16 @@ class TitleScene extends Phaser.Scene {
         })
         play.on(Phaser.Input.Events.POINTER_DOWN, () => {
             menuMusic.stop()
+            this.loopTheSong = false
             this.scene.start("game")
         })
+
+        this.input.on(Phaser.Input.Events.POINTER_DOWN, () => {
+            menuMusic.stop()
+            this.loopTheSong = false
+            this.scene.restart()
+        })
+        // console.log("bruh 1 " + this.loopTheSong)
 
         let credits = this.add.text(942, phaserCfg.height + 200, "Credits")
         credits.setFontFamily("Impact")
@@ -65,14 +81,78 @@ class TitleScene extends Phaser.Scene {
         quit.setFontSize(100)
         quit.setOrigin(0.5,0.5)
 
-        // Sequence stuff
-        menuMusic.setVolume(0.1)
-        menuMusic.play()
-        this.add.tween({
+        // let soundManager = new Phaser.Sound.BaseSoundManager
+        menuMusic.addMarker({
+            name: "intro skip",
+            start: 3.5,
+        })
+        menuMusic.play({
+            volume: 0.1
+        })
+        menuMusic.on("complete", () => {
+            menuMusic.play("intro skip",{
+                volume: 0.1,
+                loop: true,
+            })
+        })
+        let tweenManager = new Phaser.Tweens.TweenManager(this)
+        tweenManager.add({
             targets: halobg,
             x: phaserCfg.width / 4 * 3,
             duration: 3000,
         })
+        tweenManager.add({
+            targets: halobg,
+            x: phaserCfg.width / 2,
+            y: phaserCfg.height / 2,
+            scale: 2.742,
+            duration: 100,
+            // delay: delay += 3400
+        })
+        tweenManager.add({
+            targets: title,
+            duration: 400,
+            y: 200,
+            // delay: delay
+        })
+        tweenManager.add({
+            targets: title,
+            duration: 400,
+            // delay: delay,
+            repeat: -1,
+            scale: 1.2,
+            yoyo: true,
+        })
+        tweenManager.add({
+            targets: triagnal1,
+            alpha: 1,
+            duration: 0
+        })
+        tweenManager.add({
+            targets: ellipse1,
+            alpha: 1,
+            duration: 0
+        })
+        tweenManager.add({
+            targets: mc,
+            delay: 3700,
+            duration: 500,
+            y: 1080
+        })
+        tweenManager.add({
+            
+        })
+        tweenManager.add({
+            
+        })
+
+
+        this.add.tween({
+            targets: halobg,
+            x: phaserCfg.width / 4 * 3,
+            duration: 3000,
+        }) 
+        
         this.add.tween({
             targets: halobg,
             x: phaserCfg.width / 2,
@@ -141,12 +221,6 @@ class TitleScene extends Phaser.Scene {
     }
 
     update() {
-        let menuMusic = this.sound.get("xenogenesis")
-        if (!menuMusic.isPlaying) {
-            menuMusic.play()
-            menuMusic.setSeek(3.5)
-        }
-        // this.input.on(Phaser.Input.Events.POINTER_DOWN, () => {console.log(this.input.x, this.input.y)})
         
     }
 

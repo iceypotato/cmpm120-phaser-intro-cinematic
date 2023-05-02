@@ -18,7 +18,15 @@ class SplashScene extends Phaser.Scene {
     create() {
         // let graphics = this.add.graphics()
         // graphics.fillStyle(0x00ffff)
-
+        let fullscreenKey = this.input.keyboard.addKey("F")
+        fullscreenKey.on("down", function() {
+            if (this.scale.isFullscreen) {
+                this.scale.stopFullscreen();
+            }
+            else {
+                this.scale.startFullscreen();
+            }
+        }, this)
         let studio = this.add.sprite(phaserCfg.width / 2 , phaserCfg.height / 2, "splash")
         studio.alpha = 0
         studio.scaleY = 0.5
